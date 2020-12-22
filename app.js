@@ -5,6 +5,7 @@ const filter = document.querySelector('#filter');
 const taskInput = document.querySelector('#task');
 
 loadEventListeners();
+
 function loadEventListeners() {
     form.addEventListener('submit', addTask);
     taskList.addEventListener('click', removeTask);
@@ -13,7 +14,6 @@ function loadEventListeners() {
 }
 
 function addTask(e) {
-    e.preventDefault();
     if(taskInput.value === '') {
         alert('Add a Task')
     }
@@ -25,7 +25,20 @@ function addTask(e) {
     link.innerHTML = '<i class="fa fa-remove"></i>';
     li.appendChild(link);
     taskList.appendChild(li);
+    storeTaskInLocalStorage(taskInput.value);
     taskInput.value = '';  
+    e.preventDefault();
+}
+
+function storeTaskInLocalStorage(task) {
+    let tasks;
+    if(localStorage.getItem('tasks') === null){
+        tasks = [];
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+    tasks.push(task);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 function removeTask(e) {
